@@ -4,7 +4,7 @@
 
 # Update and upgrade the system
 sudo apt update -y
-sudo apt upgrade -y
+
 
 # Install required dependencies (assuming Python and pip are already installed)
 sudo apt install -y python3-pip python3-venv git
