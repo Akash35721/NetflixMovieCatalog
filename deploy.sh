@@ -44,7 +44,7 @@ After=network.target
 [Service]
 User=ubuntu
 WorkingDirectory=/home/ubuntu/NetflixMovieCatalog
-ExecStart=/home/ubuntu/NetflixMovieCatalog/venv/bin/python3 /home/ubuntu/NetflixMovieCatalog/app.py
+ExecStart=/home/ubuntu/NetflixMovieCatalog/.venv/bin/python3 /home/ubuntu/NetflixMovieCatalog/app.py
 Restart=always
 Environment=PYTHONUNBUFFERED=1
 
