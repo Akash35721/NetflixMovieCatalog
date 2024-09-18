@@ -64,7 +64,7 @@ After=network.target
 User=ubuntu
 WorkingDirectory=$APP_DIR
 ExecStart=$APP_DIR/.venv/bin/python3 $APP_DIR/app.py
-Restart=always
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target" | sudo tee $SERVICE_FILE
