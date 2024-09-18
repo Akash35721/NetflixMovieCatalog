@@ -24,7 +24,7 @@ if [ -f "$SERVICE_FILE" ]; then
 fi
 
 # Ensure no process is using the port
-sudo fuser -k $PORT/tcp
+sudo lsof -ti:$PORT | xargs sudo kill -9
 
 # Clone or update the repository
 if [ ! -d "$APP_DIR" ]; then
