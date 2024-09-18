@@ -2,16 +2,17 @@
 
 # Update and upgrade the system
 sudo apt update -y
+sudo apt upgrade -y
 
 # Install required dependencies (assuming Python and pip are already installed)
 sudo apt install -y python3-pip python3-venv git
 
-# Navigate to the home directory and clone the repository
+# Navigate to the home directory and clone the repository if it doesn't exist
 cd ~
 if [ -d "NetflixMovieCatalog" ]; then
-  # If the directory exists, discard local changes and pull the latest code
+  # If the directory exists, pull the latest changes
   cd NetflixMovieCatalog
-  git reset --hard  # Discards any local changes
+  git reset --hard  # Remove local changes that prevent pull
   git pull
 else
   # Clone the repository if it doesn't exist
@@ -19,13 +20,17 @@ else
   cd NetflixMovieCatalog
 fi
 
-# Clean up the virtual environment (if any) and set it up again
-rm -rf venv
-python3 -m venv venv
+# Set up a virtual environment if not already present
+if [ ! -d "venv" ]; then
+  python3 -m venv venv
+fi
+
+# Activate the virtual environment
 source venv/bin/activate
 
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies, using --break-system-packages to avoid PEP 668 errors
+pip install --upgrade pip
+pip install --break-system-packages -r requirements.txt
 
 # Deactivate the virtual environment
 deactivate
@@ -41,17 +46,14 @@ User=ubuntu
 WorkingDirectory=/home/ubuntu/NetflixMovieCatalog
 ExecStart=/home/ubuntu/NetflixMovieCatalog/venv/bin/python3 /home/ubuntu/NetflixMovieCatalog/app.py
 Restart=always
-StandardOutput=file:/home/ubuntu/NetflixMovieCatalog/output.log
-StandardError=file:/home/ubuntu/NetflixMovieCatalog/error.log
+Environment=PYTHONUNBUFFERED=1
 
 [Install]
 WantedBy=multi-user.target
 EOF'
 
-# Reload systemd to apply the new service file
+# Reload systemd and restart the service
 sudo systemctl daemon-reload
-
-# Start and enable the Netflix Movie Catalog service
 sudo systemctl start netflixcatalog.service
 sudo systemctl enable netflixcatalog.service
 
