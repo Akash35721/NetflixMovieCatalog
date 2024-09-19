@@ -21,7 +21,7 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" > mykey.pem
           chmod 600 mykey.pem
-          
+          ssh -o StrictHostKeyChecking=no -i mykey.pem ubuntu@$EC2_PUBLIC_IP "mkdir -p ~/NetflixMovieCatalog"
           # Copy the files from the current work dir into the EC2 instance, under `~/app`.
           scp -o StrictHostKeyChecking=no -i mykey.pem -r * ubuntu@$EC2_PUBLIC_IP:~/NetflixMovieCatalog/
           
